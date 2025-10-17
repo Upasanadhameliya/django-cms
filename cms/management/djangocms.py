@@ -60,7 +60,14 @@ def execute_from_command_line(argv=None):
     # On Windows, that stub runs something like this internally:
     # python.exe -c 
     # "from cms.management.djangocms import execute_from_command_line; 
-    # execute_from_command_line()"
+    # execute_from_command_line()" (makes a new inline script here.)
+
+    # When you run a one-liner with python -c "...", 
+    # Python treats that string as a script. Internally:
+    # __name__ = "__main__"
+    # This is true for any Python code executed via -c, 
+    # because Python is essentially running it as a script — 
+    # it didn’t import it as a module.
     
     # So case 3 for djangocms <project-name> because djangocms.exe is running a new script
     # which imports execute_from_command_line from cms.management.djangocms.
