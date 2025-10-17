@@ -1,3 +1,8 @@
+# when we run pip install django-cms
+# it looks for a builder to build .whl file
+# here setuptools.build_meta is the builder
+# .whl file is a packaging format that is unused
+# by pip to install a package 
 [build-system]
 build-backend = "setuptools.build_meta"
 
@@ -60,6 +65,13 @@ admin-style = ["djangocms-admin-style>=1.2"]
 "Source" = "https://github.com/django-cms/django-cms"
 
 [project.scripts]
+# a script is created in .venv/Scripts named djangocms.exe 
+# or djangocms.py that when we run the command 
+# djangocms <project-name> runs -> python.exe execute_from_command_line()
+# and both djangocms and the project name are put as sys.argv and the 
+# execute_from_command_line() function can access them in the same variable
+# as whenever a python program runs it automatically puts the command
+# line arguments in the sys.argv variable
 djangocms = "cms.management.djangocms:execute_from_command_line"
 
 [tool.setuptools]
