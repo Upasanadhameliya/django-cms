@@ -9,6 +9,10 @@ build-backend = "setuptools.build_meta"
 requires = [ "setuptools", "setuptools-scm" ]
 
 [project]
+# When you do:
+# pip install django-cms
+# django-cms here is the PyPI distribution name — 
+# the name of the published package on pypi.org.
 name = "django-cms"
 description = "Lean enterprise content management powered by Django."
 readme = "README.rst"
@@ -64,7 +68,6 @@ admin-style = ["djangocms-admin-style>=1.2"]
 "Community" = "https://discord-support-channel.django-cms.org"
 "Source" = "https://github.com/django-cms/django-cms"
 
-[project.scripts]
 # a script is created in .venv/Scripts named djangocms.exe 
 # or djangocms.py that when we run the command 
 # djangocms <project-name> runs -> python.exe execute_from_command_line()
@@ -72,8 +75,15 @@ admin-style = ["djangocms-admin-style>=1.2"]
 # execute_from_command_line() function can access them in the same variable
 # as whenever a python program runs it automatically puts the command
 # line arguments in the sys.argv variable
+[project.scripts]
 djangocms = "cms.management.djangocms:execute_from_command_line"
 
+# when the maintainers build the package (python -m build or python setup.py bdist_wheel), 
+# setuptools packages up everything under the packages configuration in pyproject.toml.
+# In django-cms's case:
+# [tool.setuptools]
+# packages = { find = {} }
+# find = {} means “find all importable packages (directories with __init__.py)”
 [tool.setuptools]
 packages = { find = {} }
 
