@@ -9,6 +9,17 @@ def execute_from_command_line(argv=None):
 
     # Prepare arguments
     # sys.arv[:] creates a shallow copy so that we don't modify the original copy
+    # -> Why a shallow copy is enough here?
+    # The contents of sys.argv look something like this:
+    # ['djangocms', 'myproject', '--verbose']
+    # That’s a flat list of strings — there are no nested lists, dicts, or mutable objects.
+    # Now, strings in Python are immutable — you can’t modify them in place.
+    # So even if you copied the list shallowly:
+    # argv = sys.argv[:]
+    # and then changed one element:
+    # argv[0] = "python"
+    # you’re reassigning a list slot, not mutating the string "djangocms" itself.
+    # Thus, modifying argv doesn’t affect sys.argv.
     argv = argv or sys.argv[:]
     
     # This line makes sure it’s a clean filename — not a long path.

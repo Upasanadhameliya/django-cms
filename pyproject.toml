@@ -1,7 +1,7 @@
 # when we run pip install django-cms
 # it looks for a builder to build .whl file
 # here setuptools.build_meta is the builder
-# .whl file is a packaging format that is unused
+# .whl file is a packaging format that is used
 # by pip to install a package 
 [build-system]
 build-backend = "setuptools.build_meta"
