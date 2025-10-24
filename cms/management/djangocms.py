@@ -7,6 +7,10 @@ from django.core.management import load_command_class
 def execute_from_command_line(argv=None):
     """Run the startcmsproject management command."""
 
+    # (Pdb) sys.argv
+    # ['C:\\Sandy\\Documents\\OpenSource\\DjangoCMS\\main-repo\\.venv\\Scripts\\djangocms', 
+    # 'trial1']
+
     # Prepare arguments
     # sys.arv[:] creates a shallow copy so that we don't modify the original copy
     # -> Why a shallow copy is enough here?
