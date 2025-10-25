@@ -119,7 +119,8 @@ def execute_from_command_line(argv=None):
     # The first argument ("cms") tells Django which app the management command belongs to.
     # In other words, it tells Django to look for the command inside the module:
     # cms.management.commands.startcmsproject
-    # Also the class will be loaded as an object as everything in python is an object.
+    # load_command_class() returns an instance of the Command class — not the class itself.
+    # So after that line, *command is an object*, not a class definition.
     command = load_command_class("cms", "startcmsproject")
     
     # 1. djangocms myproject
