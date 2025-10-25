@@ -7,6 +7,7 @@ from django.core.management import load_command_class
 def execute_from_command_line(argv=None):
     """Run the startcmsproject management command."""
 
+    # 1. djangocms myproject
     # (Pdb) sys.argv
     # ['C:\\Sandy\\Documents\\OpenSource\\DjangoCMS\\main-repo\\.venv\\Scripts\\djangocms', 
     # 'trial1']
@@ -26,6 +27,10 @@ def execute_from_command_line(argv=None):
     # Thus, modifying argv doesn’t affect sys.argv.
     argv = argv or sys.argv[:]
     
+    # 1. djangocms myproject
+    # (Pdb) argv
+    # ['C:\\Sandy\\Documents\\OpenSource\\DjangoCMS\\main-repo\\.venv\\Scripts\\djangocms', 'trial-project']
+    
     # This line makes sure it’s a clean filename — not a long path.
     # Let’s say the OS invoked your program as:
     # /Users/sandy/.local/bin/djangocms myproject
@@ -37,6 +42,10 @@ def execute_from_command_line(argv=None):
     # So the command name shown in help messages and 
     # error traces becomes shorter and cleaner.
     argv[0] = os.path.basename(argv[0])
+
+    # 1. djangocms myproject
+    # (Pdb) argv
+    # ['djangocms', 'trial-project']
 
     # Case - When running it as:
     # python -m cms.management.djangocms myproject
@@ -87,9 +96,29 @@ def execute_from_command_line(argv=None):
     # So case 3 for djangocms <project-name> because djangocms.exe is running a new script
     # which imports execute_from_command_line from cms.management.djangocms.
     if argv[0] == "__main__.py":
+        # if we run it as python -m cms.management.djangocms myproject
+        # i.e. Case 2, thenargv[0] is __main__.py and then our argv would be
+        # ["python -m cms", "myproject"]
         argv[0] = "python -m cms"
 
+    # 1. djangocms myproject
+    # (Pdb) argv
+    # ['djangocms', 'trial-project']
+
     # Find command
+    # The function load_command_class(app_name, name) is Django’s internal 
+    # way of locating and importing a management command from a given app.
+    # It searches for a command file with this pattern:
+    # <app_name>/management/commands/<name>.py
+    # and returns the Command class defined inside that file.
+    # So in this case:
+    # load_command_class("cms", "startcmsproject")
+    # Django will try to import:
+    # cms.management.commands.startcmsproject
+    # and then grab its Command class.
+    # The first argument ("cms") tells Django which app the management command belongs to.
+    # In other words, it tells Django to look for the command inside the module:
+    # cms.management.commands.startcmsproject
     command = load_command_class("cms", "startcmsproject")
     if argv[1:] == ["--version"]:
         from cms import __version__
