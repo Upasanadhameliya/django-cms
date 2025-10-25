@@ -119,7 +119,13 @@ def execute_from_command_line(argv=None):
     # The first argument ("cms") tells Django which app the management command belongs to.
     # In other words, it tells Django to look for the command inside the module:
     # cms.management.commands.startcmsproject
+    # Also the class will be loaded as an object as everything in python is an object.
     command = load_command_class("cms", "startcmsproject")
+    
+    # 1. djangocms myproject
+    # (Pdb) command
+    # <cms.management.commands.startcmsproject.Command object at 0x0000016EA7C7DB80>
+
     if argv[1:] == ["--version"]:
         from cms import __version__
         sys.stdout.write(__version__ + "\n")
