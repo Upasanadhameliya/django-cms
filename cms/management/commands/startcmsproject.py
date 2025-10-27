@@ -10,7 +10,13 @@ from django.core.management.utils import get_random_secret_key
 
 from cms import __version__ as cms_version
 
-
+# There can be multiple commands like startcmsproject, updatecmsproject, deletecmsproject
+# for implementing these commands we inherit from BaseCommand class
+# here we are creating a template using our command hence we are inheriting from
+# TemplateCommand class which in turn inherits from a generic BaseCommand class.
+# If we want to implement a custom project template we can either modify this file
+# or create a new command that inherits from a TemplateCommand, like maybe
+# we want to create a command that adds an app to our existing project.
 class Command(TemplateCommand):
     help = (
         "Creates a django CMS project directory structure for the given project "
@@ -20,13 +26,24 @@ class Command(TemplateCommand):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # (Pdb) self.__dict__
+        # {'stdout': <django.core.management.base.OutputWrapper object at 0x000001FE7D543080>,
+        #  'stderr': <django.core.management.base.OutputWrapper object at 0x000001FE7D51D3D0>,
+        #  'style': <django.core.management.color.Style object at 0x000001FE7D51D400>}
 
         # Version major.minor
         self.major_minor = ".".join(cms_version.split(".")[:2])
 
         # Configure formatting
         self.HEADING = lambda text: "\n" + self.style.SQL_FIELD(text)
-        self.COMMAND = self.style.HTTP_SUCCESS
+        self.COMMAND = self.style.HTTP_SUCCESS # Sets up the terminal color scheme.
+        # 1. djangocms myproject
+        # (Pdb) self.major_minor
+        # '5.1'
+        # (Pdb) self.HEADING
+        # <function Command.__init__.<locals>.<lambda> at 0x000001FE7D88E2A0>
+        # (Pdb) self.COMMAND
+        # <function make_style.<locals>.style_func at 0x000001FE7D85D800>
 
     def add_arguments(self, parser):
         super().add_arguments(parser)

@@ -121,6 +121,16 @@ def execute_from_command_line(argv=None):
     # cms.management.commands.startcmsproject
     # load_command_class() returns an instance of the Command class — not the class itself.
     # So after that line, *command is an object*, not a class definition.
+    # Also currently "djangocms" maps to the internal command "startproject", but then
+    # later we may decide to map it to a command called "updateproject" or we might
+    # want to change the name of "djangocms" to "djcms" or "cms-admin" in that case
+    # the decoupling of "startcmsproject" (which is an internal command) and "djangcms"
+    # (which is an external command) is useful. We might also want to map the same two
+    # arguments "django-cms" and "djangocms" to "startcmsproject" or map the same one
+    # argument "djangocms" to different internal commands like "startcmsproject" and 
+    # "updatecmsproject" based on a flag or the number of arguments like djangocms mp1
+    # should mean startcmsproject but djangocms mp1 mp2 should mean updatecmsproject
+    # from mp1 to mp2 something like that.
     command = load_command_class("cms", "startcmsproject")
     
     # 1. djangocms myproject
