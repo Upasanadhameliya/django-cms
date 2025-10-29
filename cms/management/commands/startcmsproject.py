@@ -34,9 +34,41 @@ class Command(TemplateCommand):
         # Version major.minor
         self.major_minor = ".".join(cms_version.split(".")[:2])
 
+        # Both lines are defining formatting helpers for printing nicely-colored CLI output.
+        # They rely on self.style, which comes from BaseCommand’s initializer:
+        # self.style = color_style(force_color)
+        # and color_style() creates an instance of Django’s Style class.
+        # That class builds its color functions from the palettes in termcolors.py.
+
+        # def color_style(force_color=False):
+        # """
+        # Return a Style object from the Django color scheme.
+        # """
+        #   if not force_color and not supports_color():
+        #        return no_style()
+        #   return make_style(os.environ.get("DJANGO_COLORS", ""))
         # Configure formatting
+        # self.style is an instance of the Django Style class (created by color_style()),
+        # which has attributes like .SQL_FIELD, .ERROR, .SUCCESS, etc.
+        # self.style.SQL_FIELD is a function that colors text — specifically, 
+        # in the default (“dark”) palette it’s:
+        # SQL_FIELD → {"fg": "green", "opts": ("bold",)}
+        # So calling it like:
+        # self.style.SQL_FIELD("Run migrations")
+        # returns:
+        # "\x1b[1;32mRun migrations\x1b[0m"   # Bold green text in ANSI
+        # The lambda adds a line break before that colored text:
+        # lambda text: "\n" + self.style.SQL_FIELD(text)
+        # 🧠 Effectively:
+        # When the code later does:
+        # self.stdout.write(self.HEADING("Run migrations"))
+        # …it prints:
+        # <newline>
+        # [bold green]Run migrations[/reset]
+        # So it visually separates sections in the CLI output —
+        #  making headings stand out clearly.
         self.HEADING = lambda text: "\n" + self.style.SQL_FIELD(text)
-        self.COMMAND = self.style.HTTP_SUCCESS # Sets up the terminal color scheme.
+        self.COMMAND = self.style.HTTP_SUCCESS
         # 1. djangocms myproject
         # (Pdb) self.major_minor
         # '5.1'
